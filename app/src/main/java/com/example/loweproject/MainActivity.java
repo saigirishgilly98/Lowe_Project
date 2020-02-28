@@ -133,7 +133,7 @@ public class MainActivity extends ListActivity {
                     String text_rack = new String(buffer_rack);
 
                     String lines_rack[] = text_rack.split("\\r?\\n");
-                    int[] rackList = new int[13];
+                    int[] rackList = new int[listArray.size()];
                     for(i=0;i<rackList.length;i++)
                         rackList[i] = -1;
 
@@ -144,11 +144,9 @@ public class MainActivity extends ListActivity {
                         product_name = listArray.get(i);
                         Log.d(MainActivity.TAG,product_name);
                         for (j = 0; j < 3620; j++) {
-                            if(j<10)
-                                Log.d(MainActivity.TAG,"Product:"+lines_product[j]);
-                            if(product_name == lines_product[j]){
-                                rackList[k] = Integer.parseInt(lines_rack[j]);
+                            if(product_name.equals(lines_product[j])){
                                 Log.d(MainActivity.TAG,"Rack No: "+lines_rack[j]);
+                                rackList[k] = Integer.parseInt(lines_rack[j]);
                                 k++;
                                 break;
                             }
@@ -162,6 +160,12 @@ public class MainActivity extends ListActivity {
                     }
                     rackorder = rackorder + "0";
                     Toast.makeText(MainActivity.this, rackorder, Toast.LENGTH_SHORT).show();
+
+
+                    //Google-TSP
+
+
+
                     for(i=0;i<rackList.length;i++)
                         rackList[i] = -1;
 
