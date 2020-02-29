@@ -25,6 +25,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class MainActivity extends ListActivity {
     private List<CountryItem> countryList;
@@ -36,7 +37,7 @@ public class MainActivity extends ListActivity {
     ArrayAdapter<String> adapter2;
 
     String item,product_name;
-    String rackorder = "";
+    String var_rack_order = "";
     private static final String TAG = MainActivity.class.getName();
 
     int i,j;
@@ -126,12 +127,14 @@ public class MainActivity extends ListActivity {
 
                     InputStream is = getAssets().open("array.txt");
                     InputStream is2 = getAssets().open("arrayrack.txt");
+                    InputStream is3 = getAssets().open("path.txt");
 
                     // We guarantee that the available method returns the total
                     // size of the asset...  of course, this does mean that a single
                     // asset can't be more than 2 gigs.
                     int size1 = is.available();
                     int size2 = is2.available();
+                    int size3 = is3.available();
 
                     // Read the entire asset into a local byte buffer.
                     byte[] buffer_product = new byte[size1];
@@ -142,6 +145,10 @@ public class MainActivity extends ListActivity {
                     is2.read(buffer_rack);
                     is2.close();
 
+                    byte[] buffer_path = new byte[size3];
+                    is3.read(buffer_path);
+                    is3.close();
+
                     // Convert the buffer into a string.
                     String text_product = new String(buffer_product);
 
@@ -150,12 +157,21 @@ public class MainActivity extends ListActivity {
                     String text_rack = new String(buffer_rack);
 
                     String lines_rack[] = text_rack.split("\\r?\\n");
+
+                    String text_path = new String(buffer_path);
+
+                    String lines_path[] = text_path.split("\\r?\\n");
+
+                    /*String[][] array_lines_path = new String[lines_path.length][];
+
+                    for(i=0;i<lines_path.length;i++)
+                        array_lines_path[i] = lines_path[i].split(" ");*/
+
                     int[] rackList = new int[listArray.size()];
                     for(i=0;i<rackList.length;i++)
                         rackList[i] = -1;
 
                     int k = 0;
-                    rackorder = "";
 
                     for (i = 0; i < listArray.size(); i++) {
                         product_name = listArray.get(i);
@@ -178,7 +194,7 @@ public class MainActivity extends ListActivity {
                         }
                         Log.d(MainActivity.TAG,""+rackList[i]);
                     }
-                    int[] uniquerackorder = new int[t];
+                    Integer[] uniquerackorder = new Integer[t];
                     for(i=0;i<t;i++)
                         uniquerackorder[i] = -1;
                     int l=0,flag=0;
@@ -220,7 +236,31 @@ public class MainActivity extends ListActivity {
                             Log.d(MainActivity.TAG,""+newDistanceMatrix[i][j]);
                         }
                     }
-                    //Toast.makeText(MainActivity.this, rackorder, Toast.LENGTH_SHORT).show();
+
+                    Log.d(MainActivity.TAG,"Lines Path:\n");
+                    for(i=0;i<(lines_path.length);i++){
+                        String[] tokens = lines_path[i].split(" ");
+                        Integer[] array_path = new Integer[tokens.length];
+                        int y = 0;
+                        for (String token : tokens){
+                            array_path[y++] = Integer.parseInt(token);
+                        }
+                        if(compareArrays(array_path, uniquerackorder))
+                        {
+                            for(i=0;i<((array_path.length)-1);i++)
+                            {
+                                var_rack_order += "" + array_path[i] + "->";
+                                Log.d(MainActivity.TAG,"Optmized Path:"+array_path[i]);
+                            }
+                            var_rack_order += array_path[i];
+                            Toast.makeText(MainActivity.this, var_rack_order, Toast.LENGTH_SHORT).show();
+                            break;
+                        }
+
+                    }
+
+
+                    Log.d(MainActivity.TAG,""+lines_path[i]);
 
 
                     for(i=0;i<rackList.length;i++)
@@ -245,6 +285,12 @@ public class MainActivity extends ListActivity {
 
         /** Setting the adapter to the ListView */
         setListAdapter(adapter2);
+    }
+
+    public static boolean compareArrays(Integer[] arr1, Integer[] arr2) {
+        HashSet<Integer> set1 = new HashSet<Integer>(Arrays.asList(arr1));
+        HashSet<Integer> set2 = new HashSet<Integer>(Arrays.asList(arr2));
+        return set1.equals(set2);
     }
 
     private void fillCountryList() {
