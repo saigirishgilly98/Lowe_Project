@@ -24,7 +24,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
 
 public class MainActivity extends ListActivity {
@@ -69,8 +71,14 @@ public class MainActivity extends ListActivity {
             public void onClick(View v) {
                 AutoCompleteTextView edit = (AutoCompleteTextView) findViewById(R.id.actv);
                 item = edit.getText().toString();
-                if(item != "")
-                    listArray.add(item);
+                for(CountryItem country:countryList)
+                {
+                    if(country.getCountryName().equals(item))
+                    {
+                        listArray.add(item);
+                        break;
+                    }
+                }
 
                 //Deleting Same entries
 
@@ -185,7 +193,7 @@ public class MainActivity extends ListActivity {
                             }
                         }
                     }
-                    int[] rackorder = new int[k];
+                    Integer[] rackorder = new Integer[k];
                     int t = 0;
                     for(i=0;i<rackList.length;i++) {
                         if (rackList[i] != -1) {
@@ -194,31 +202,19 @@ public class MainActivity extends ListActivity {
                         }
                         Log.d(MainActivity.TAG,""+rackList[i]);
                     }
-                    Integer[] uniquerackorder = new Integer[t];
-                    for(i=0;i<t;i++)
-                        uniquerackorder[i] = -1;
-                    int l=0,flag=0;
-                    for(i = 0; i < t; i++)
-                    {
-                        for(j=0;j<t;j++)
-                        {
-                           if(rackorder[i] == uniquerackorder[j]){
-                               flag = 1;
-                           }
-                        }
-                        if(flag == 0)
-                        {
-                            uniquerackorder[l] = rackorder[i];
-                            l++;
-                        }
-                        else{
-                            flag = 0;
-                        }
-                    }
+                    for(i=0;i<rackorder.length;i++)
+                        Log.d(MainActivity.TAG,"rackorder:"+rackorder[i]);
+
+                    //Create set from array elements
+                    LinkedHashSet<Integer> linkedHashSet = new LinkedHashSet<>( Arrays.asList(rackorder) );
+
+                    //Get back the array without duplicates
+                    Integer[] uniquerackorder = linkedHashSet.toArray(new Integer[] {});
+
                     int temp;
-                    for (i = 0; i < l; i++)
+                    for (i = 0; i < uniquerackorder.length; i++)
                     {
-                        for (j = i + 1; j < l; j++) {
+                        for (j = i + 1; j < uniquerackorder.length; j++) {
                             if (uniquerackorder[i] > uniquerackorder[j])
                             {
                                 temp = uniquerackorder[i];
@@ -227,10 +223,14 @@ public class MainActivity extends ListActivity {
                             }
                         }
                     }
+                    for(i=0;i<rackorder.length;i++)
+                        Log.d(MainActivity.TAG,"RackOrder:"+rackorder[i]);
+                    for(i=0;i<uniquerackorder.length;i++)
+                        Log.d(MainActivity.TAG,"UniqueRackOrder:"+uniquerackorder[i]);
                     int[][] newDistanceMatrix = new int[uniquerackorder.length][uniquerackorder.length];
-                    for(i=0;i<l;i++)
+                    for(i=0;i<uniquerackorder.length;i++)
                     {
-                        for(j=0;j<l;j++)
+                        for(j=0;j<uniquerackorder.length;j++)
                         {
                             newDistanceMatrix[i][j] = distanceMatrix[uniquerackorder[i]][uniquerackorder[j]];
                             Log.d(MainActivity.TAG,""+newDistanceMatrix[i][j]);
@@ -258,9 +258,10 @@ public class MainActivity extends ListActivity {
                         }
 
                     }
+                    var_rack_order = "";
 
 
-                    Log.d(MainActivity.TAG,""+lines_path[i]);
+                    //Log.d(MainActivity.TAG,""+lines_path[i]);
 
 
                     for(i=0;i<rackList.length;i++)
