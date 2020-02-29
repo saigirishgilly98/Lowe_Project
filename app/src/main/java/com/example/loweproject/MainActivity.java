@@ -71,14 +71,23 @@ public class MainActivity extends ListActivity {
             public void onClick(View v) {
                 AutoCompleteTextView edit = (AutoCompleteTextView) findViewById(R.id.actv);
                 item = edit.getText().toString();
+                int var_toast = 0;
                 for(CountryItem country:countryList)
                 {
                     if(country.getCountryName().equals(item))
                     {
                         listArray.add(item);
+                        var_toast = 0;
                         break;
                     }
+                    else{
+                        var_toast = 1;
+                    }
                 }
+                if(var_toast == 1) {
+                    Toast.makeText(MainActivity.this, "Enter Valid Option!", Toast.LENGTH_SHORT).show();
+                }
+
 
                 //Deleting Same entries
 
@@ -101,11 +110,23 @@ public class MainActivity extends ListActivity {
                 /** Getting the checked items from the listview */
                 SparseBooleanArray checkedItemPositions = getListView().getCheckedItemPositions();
                 int itemCount = getListView().getCount();
+                int item_flag = 0;
 
+                if(itemCount == 0) {
+                    Toast.makeText(MainActivity.this, "List is Empty!", Toast.LENGTH_SHORT).show();
+                    item_flag = 1;
+                }
                 for(int i=itemCount-1; i >= 0; i--){
                     if(checkedItemPositions.get(i)){
                         adapter2.remove(listArray.get(i));
+                        item_flag = 1;
                     }
+                }
+                if(item_flag == 0){
+                    Toast.makeText(MainActivity.this, "Select Items to delete!", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    item_flag = 0;
                 }
                 checkedItemPositions.clear();
                 adapter2.notifyDataSetChanged();
@@ -117,6 +138,9 @@ public class MainActivity extends ListActivity {
             @Override
             public void onClick(View v) {
                 try {
+
+                    if(listArray.size() == 0)
+                        Toast.makeText(MainActivity.this, "List is empty!", Toast.LENGTH_SHORT).show();
 
                     int[][] distanceMatrix = {
                             {0, 2451, 713, 1018, 1631, 1374, 2408, 213, 2571, 875, 1420, 2145, 1972},
@@ -256,7 +280,6 @@ public class MainActivity extends ListActivity {
                             Toast.makeText(MainActivity.this, var_rack_order, Toast.LENGTH_SHORT).show();
                             break;
                         }
-
                     }
                     var_rack_order = "";
 
