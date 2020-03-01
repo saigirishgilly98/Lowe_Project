@@ -1,16 +1,28 @@
 package com.example.loweproject;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ListActivity;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseBooleanArray;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -29,7 +41,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
-public class MainActivity extends ListActivity {
+public class MainActivity extends ListActivity{
     private List<CountryItem> countryList;
 
     /** Items entered by the user is stored in this ArrayList variable */
@@ -60,7 +72,7 @@ public class MainActivity extends ListActivity {
         /** Reference to the delete button of the layout main.xml */
         Button btnDel = (Button) findViewById(R.id.btnDel);
 
-        Button btnDone = (Button) findViewById(R.id.btnDone);
+        final Button btnDone = (Button) findViewById(R.id.btnDone);
 
         /** Defining the ArrayAdapter to set items to ListView */
         adapter2= new ArrayAdapter<String>(this, android.R.layout.simple_list_item_multiple_choice, listArray);
@@ -262,6 +274,7 @@ public class MainActivity extends ListActivity {
                     }
 
                     Log.d(MainActivity.TAG,"Lines Path:\n");
+                    int rackflag = 0;
                     for(i=0;i<(lines_path.length);i++){
                         String[] tokens = lines_path[i].split(" ");
                         Integer[] array_path = new Integer[tokens.length];
@@ -277,10 +290,46 @@ public class MainActivity extends ListActivity {
                                 Log.d(MainActivity.TAG,"Optmized Path:"+array_path[i]);
                             }
                             var_rack_order += array_path[i];
-                            Toast.makeText(MainActivity.this, var_rack_order, Toast.LENGTH_SHORT).show();
+                            rackflag = 1;
                             break;
                         }
                     }
+                    if(rackflag == 1)
+                    {
+                        rackflag = 0;
+                        String output = "";
+                        String finalOutput = "";
+                        Integer[] sortedRackOrder = new Integer[rackorder.length];
+                        String[] sortedListArray = new String[listArray.size()];
+                        for(i=0;i<rackorder.length;i++)
+                        {
+                            sortedRackOrder[i] = rackorder[i];
+                            sortedListArray[i] = listArray.get(i);
+                        }
+                        int temp1;
+                        String temp2;
+                        for (i = 0; i < sortedRackOrder.length; i++)
+                        {
+                            for (j = i + 1; j < sortedRackOrder.length; j++) {
+                                if (sortedRackOrder[i] > sortedRackOrder[j])
+                                {
+                                    temp1 = sortedRackOrder[i];
+                                    sortedRackOrder[i] = sortedRackOrder[j];
+                                    sortedRackOrder[j] = temp1;
+                                    temp2 = sortedListArray[i];
+                                    sortedListArray[i] = sortedListArray[j];
+                                    sortedListArray[j] = temp2;
+                                }
+                            }
+                        }
+                        finalOutput += "The Shortest path is : \n" + var_rack_order + "\n----------------------------\n";
+                        for(i=0;i<sortedRackOrder.length;i++)
+                            output += "" + sortedRackOrder[i] + "->" + sortedListArray[i] + "\n" + "----------------------------" + "\n";
+                        finalOutput += output;
+                        showCustomDialog(finalOutput);
+                    }
+
+
                     var_rack_order = "";
 
 
@@ -316,6 +365,42 @@ public class MainActivity extends ListActivity {
         HashSet<Integer> set2 = new HashSet<Integer>(Arrays.asList(arr2));
         return set1.equals(set2);
     }
+
+    private void showCustomDialog(String var_rack_order) {
+        //before inflating the custom alert dialog layout, we will get the current activity viewgroup
+        ViewGroup viewGroup = findViewById(android.R.id.content);
+
+
+        //then we will inflate the custom alert dialog xml that we created
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.my_dialog, viewGroup, false);
+
+        Button buttonOk = (Button)dialogView.findViewById(R.id.buttonOk);
+
+        TextView txtPath = (TextView)dialogView.findViewById(R.id.txtPath);
+        txtPath.setText(var_rack_order);
+
+        //Now we need an AlertDialog.Builder object
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        //setting the view of the builder to our custom view that we already inflated
+        builder.setView(dialogView);
+
+        //finally creating the alert dialog and displaying it
+        final AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+        View.OnClickListener listenerOk = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        };
+
+
+        buttonOk.setOnClickListener(listenerOk);
+
+    }
+
 
     private void fillCountryList() {
         countryList = new ArrayList<>();
