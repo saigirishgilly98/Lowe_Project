@@ -11,6 +11,6 @@ Deployment Instructions:
 6. Finally, run and allow to install if any pop up appears in your device.
 
 Team Name: NITK Techies
-Team Members: S Sai Girish
-              Kaushikq Ravindran
+Team Members: S Sai Girish,
+              Kaushikq Ravindran,
               Vasudev B M
