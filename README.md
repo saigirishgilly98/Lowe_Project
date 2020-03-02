@@ -10,6 +10,8 @@ Deployment Instructions:
 5. If the mobile is not getting detected i.e. you are not able to see your device check that you have enabled developer options and try turning Transfer Photos (PTP) option on in your connected device and accept USB debugging.
 6. Finally, run and allow to install if any pop up appears in your device.
 
+Deployed app in debug mode is available in https://github.com/saigirishgilly98/Lowe_Project/blob/master/app/debug/app-debug.apk
+
 Team Name: NITK Techies
 Team Members: S Sai Girish,
               Kaushikq Ravindran,
