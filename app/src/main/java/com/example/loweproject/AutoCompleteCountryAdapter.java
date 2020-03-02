@@ -14,7 +14,9 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/***
+ * This is an adapter to auto complete the text entered in "Select a product textview"
+ */
 public class AutoCompleteCountryAdapter extends ArrayAdapter<CountryItem> {
     private List<CountryItem> countryListFull;
 

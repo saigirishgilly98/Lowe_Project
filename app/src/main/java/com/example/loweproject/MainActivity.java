@@ -41,28 +41,47 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
-public class MainActivity extends ListActivity{
+
+/**
+ * This is the Main Activity of the program, where every functionality is implemented.
+ */
+public class MainActivity extends ListActivity {
     private List<CountryItem> countryList;
 
-    /** Items entered by the user is stored in this ArrayList variable */
+    /**
+     * Items entered by the user is stored in this ArrayList variable
+     */
     ArrayList<String> listArray = new ArrayList<String>();
 
-    /** Declaring an ArrayAdapter to set items to ListView */
+    /**
+     * Declaring an ArrayAdapter to set items to ListView
+     */
     ArrayAdapter<String> adapter2;
 
-    String item,product_name;
+    /**
+     * Declaring item to set the user entered item  in textview
+     * Declaring product_name to set each list item entered recursively
+     * Declaring var_rack_order to set the path of racks
+     */
+    String item, product_name;
     String var_rack_order = "";
     private static final String TAG = MainActivity.class.getName();
 
-    int i,j;
+    int i, j;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        /**
+         * Function called to fill all the product names in autoCompleteTextView
+         */
         fillCountryList();
 
+        /**
+         * Referencing AutoCompleteTextView by using id and setting AutoCompleteCountryAdapter
+         */
         AutoCompleteTextView editText = findViewById(R.id.actv);
         AutoCompleteCountryAdapter adapter = new AutoCompleteCountryAdapter(this, countryList);
         editText.setAdapter(adapter);
@@ -72,31 +91,30 @@ public class MainActivity extends ListActivity{
         /** Reference to the delete button of the layout main.xml */
         Button btnDel = (Button) findViewById(R.id.btnDel);
 
+        /** Reference to the done button of the layout main.xml */
         final Button btnDone = (Button) findViewById(R.id.btnDone);
 
         /** Defining the ArrayAdapter to set items to ListView */
-        adapter2= new ArrayAdapter<String>(this, android.R.layout.simple_list_item_multiple_choice, listArray);
+        adapter2 = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_multiple_choice, listArray);
 
         /** Defining a click event listener for the button "Add" */
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Adding every valid entered element into the listArray
                 AutoCompleteTextView edit = (AutoCompleteTextView) findViewById(R.id.actv);
                 item = edit.getText().toString();
                 int var_toast = 0;
-                for(CountryItem country:countryList)
-                {
-                    if(country.getCountryName().equals(item))
-                    {
+                for (CountryItem country : countryList) {
+                    if (country.getCountryName().equals(item)) {
                         listArray.add(item);
                         var_toast = 0;
                         break;
-                    }
-                    else{
+                    } else {
                         var_toast = 1;
                     }
                 }
-                if(var_toast == 1) {
+                if (var_toast == 1) {
                     Toast.makeText(MainActivity.this, "Enter Valid Option!", Toast.LENGTH_SHORT).show();
                 }
 
@@ -124,20 +142,20 @@ public class MainActivity extends ListActivity{
                 int itemCount = getListView().getCount();
                 int item_flag = 0;
 
-                if(itemCount == 0) {
+                if (itemCount == 0) {
                     Toast.makeText(MainActivity.this, "List is Empty!", Toast.LENGTH_SHORT).show();
                     item_flag = 1;
                 }
-                for(int i=itemCount-1; i >= 0; i--){
-                    if(checkedItemPositions.get(i)){
+                //Delete all the selected items
+                for (int i = itemCount - 1; i >= 0; i--) {
+                    if (checkedItemPositions.get(i)) {
                         adapter2.remove(listArray.get(i));
                         item_flag = 1;
                     }
                 }
-                if(item_flag == 0){
+                if (item_flag == 0) {
                     Toast.makeText(MainActivity.this, "Select Items to delete!", Toast.LENGTH_SHORT).show();
-                }
-                else{
+                } else {
                     item_flag = 0;
                 }
                 checkedItemPositions.clear();
@@ -151,9 +169,14 @@ public class MainActivity extends ListActivity{
             public void onClick(View v) {
                 try {
 
-                    if(listArray.size() == 0)
+                    //Checking if the list is empty
+                    if (listArray.size() == 0)
                         Toast.makeText(MainActivity.this, "List is empty!", Toast.LENGTH_SHORT).show();
 
+                    /**
+                     * Initializing the distanceMatrix
+                     * in which distanceMatrix[i,j] refers to the distance between rack i to rack j
+                     */
                     int[][] distanceMatrix = {
                             {0, 2451, 713, 1018, 1631, 1374, 2408, 213, 2571, 875, 1420, 2145, 1972},
                             {2451, 0, 1745, 1524, 831, 1240, 959, 2596, 403, 1589, 1374, 357, 579},
@@ -167,8 +190,11 @@ public class MainActivity extends ListActivity{
                             {875, 1589, 262, 466, 796, 547, 1724, 1038, 1744, 0, 679, 1272, 1162},
                             {1420, 1374, 940, 1056, 879, 225, 1891, 1605, 1645, 679, 0, 1017, 1200},
                             {2145, 357, 1453, 1280, 586, 887, 1114, 2300, 653, 1272, 1017, 0, 504},
-                            {1972, 579, 1260, 987, 371, 999, 701, 2099, 600, 1162, 1200, 504, 0} };
+                            {1972, 579, 1260, 987, 371, 999, 701, 2099, 600, 1162, 1200, 504, 0}};
 
+                    /**
+                     * opening the files
+                     */
                     InputStream is = getAssets().open("array.txt");
                     InputStream is2 = getAssets().open("arrayrack.txt");
                     InputStream is3 = getAssets().open("path.txt");
@@ -206,113 +232,109 @@ public class MainActivity extends ListActivity{
 
                     String lines_path[] = text_path.split("\\r?\\n");
 
-                    /*String[][] array_lines_path = new String[lines_path.length][];
-
-                    for(i=0;i<lines_path.length;i++)
-                        array_lines_path[i] = lines_path[i].split(" ");*/
-
+                    //Declaring rackList which is used to store the rack numbers of entered list items
                     int[] rackList = new int[listArray.size()];
-                    for(i=0;i<rackList.length;i++)
+
+                    //Initializing to rackList array to -1
+                    for (i = 0; i < rackList.length; i++)
                         rackList[i] = -1;
 
                     int k = 0;
 
+                    //Storing all the rack numbers of entered list items
                     for (i = 0; i < listArray.size(); i++) {
                         product_name = listArray.get(i);
-                        Log.d(MainActivity.TAG,product_name);
+                        Log.d(MainActivity.TAG, product_name);
                         for (j = 0; j < 3620; j++) {
-                            if(product_name.equals(lines_product[j])){
-                                Log.d(MainActivity.TAG,"Rack No: "+lines_rack[j]);
+                            if (product_name.equals(lines_product[j])) {
+                                Log.d(MainActivity.TAG, "Rack No: " + lines_rack[j]);
                                 rackList[k] = Integer.parseInt(lines_rack[j]);
                                 k++;
                                 break;
                             }
                         }
                     }
+                    //Declaring Rackorder to get definite number of rack numbers without impure(-1) values
                     Integer[] rackorder = new Integer[k];
                     int t = 0;
-                    for(i=0;i<rackList.length;i++) {
+                    for (i = 0; i < rackList.length; i++) {
                         if (rackList[i] != -1) {
                             rackorder[t] = rackList[i];
                             t++;
                         }
-                        Log.d(MainActivity.TAG,""+rackList[i]);
+                        Log.d(MainActivity.TAG, "" + rackList[i]);
                     }
-                    for(i=0;i<rackorder.length;i++)
-                        Log.d(MainActivity.TAG,"rackorder:"+rackorder[i]);
+                    for (i = 0; i < rackorder.length; i++)
+                        Log.d(MainActivity.TAG, "rackorder:" + rackorder[i]);
 
                     //Create set from array elements
-                    LinkedHashSet<Integer> linkedHashSet = new LinkedHashSet<>( Arrays.asList(rackorder) );
+                    LinkedHashSet<Integer> linkedHashSet = new LinkedHashSet<>(Arrays.asList(rackorder));
 
                     //Get back the array without duplicates
-                    Integer[] uniquerackorder = linkedHashSet.toArray(new Integer[] {});
+                    Integer[] uniquerackorder = linkedHashSet.toArray(new Integer[]{});
 
                     int temp;
-                    for (i = 0; i < uniquerackorder.length; i++)
-                    {
+                    //Sorting the unique rack order
+                    for (i = 0; i < uniquerackorder.length; i++) {
                         for (j = i + 1; j < uniquerackorder.length; j++) {
-                            if (uniquerackorder[i] > uniquerackorder[j])
-                            {
+                            if (uniquerackorder[i] > uniquerackorder[j]) {
                                 temp = uniquerackorder[i];
                                 uniquerackorder[i] = uniquerackorder[j];
                                 uniquerackorder[j] = temp;
                             }
                         }
                     }
-                    for(i=0;i<rackorder.length;i++)
-                        Log.d(MainActivity.TAG,"RackOrder:"+rackorder[i]);
-                    for(i=0;i<uniquerackorder.length;i++)
-                        Log.d(MainActivity.TAG,"UniqueRackOrder:"+uniquerackorder[i]);
+                    /**
+                     * Declaring and initializing newDistanceMatrix to only contain the distances between
+                     * the rack numbers of entered list items.
+                     */
                     int[][] newDistanceMatrix = new int[uniquerackorder.length][uniquerackorder.length];
-                    for(i=0;i<uniquerackorder.length;i++)
-                    {
-                        for(j=0;j<uniquerackorder.length;j++)
-                        {
+                    for (i = 0; i < uniquerackorder.length; i++) {
+                        for (j = 0; j < uniquerackorder.length; j++) {
                             newDistanceMatrix[i][j] = distanceMatrix[uniquerackorder[i]][uniquerackorder[j]];
-                            Log.d(MainActivity.TAG,""+newDistanceMatrix[i][j]);
                         }
                     }
 
-                    Log.d(MainActivity.TAG,"Lines Path:\n");
+                    /**
+                     * Getting the shortest path by comparing the obtained rack numbers with the
+                     * same rack numbers in any order present in paths.txt file
+                     */
                     int rackflag = 0;
-                    for(i=0;i<(lines_path.length);i++){
+                    for (i = 0; i < (lines_path.length); i++) {
                         String[] tokens = lines_path[i].split(" ");
                         Integer[] array_path = new Integer[tokens.length];
                         int y = 0;
-                        for (String token : tokens){
+                        for (String token : tokens) {
                             array_path[y++] = Integer.parseInt(token);
                         }
-                        if(compareArrays(array_path, uniquerackorder))
-                        {
-                            for(i=0;i<((array_path.length)-1);i++)
-                            {
+                        if (compareArrays(array_path, uniquerackorder)) {
+                            for (i = 0; i < ((array_path.length) - 1); i++) {
                                 var_rack_order += "" + array_path[i] + "->";
-                                Log.d(MainActivity.TAG,"Optmized Path:"+array_path[i]);
                             }
                             var_rack_order += array_path[i];
                             rackflag = 1;
                             break;
                         }
                     }
-                    if(rackflag == 1)
-                    {
+                    /**
+                     * If shortest rack order found then sort rack order and corresponding product name in
+                     * ascending order according to rack no
+                     */
+                    if (rackflag == 1) {
                         rackflag = 0;
                         String output = "";
                         String finalOutput = "";
                         Integer[] sortedRackOrder = new Integer[rackorder.length];
                         String[] sortedListArray = new String[listArray.size()];
-                        for(i=0;i<rackorder.length;i++)
-                        {
+                        for (i = 0; i < rackorder.length; i++) {
                             sortedRackOrder[i] = rackorder[i];
                             sortedListArray[i] = listArray.get(i);
                         }
                         int temp1;
                         String temp2;
-                        for (i = 0; i < sortedRackOrder.length; i++)
-                        {
+                        for (i = 0; i < sortedRackOrder.length; i++) {
                             for (j = i + 1; j < sortedRackOrder.length; j++) {
-                                if (sortedRackOrder[i] > sortedRackOrder[j])
-                                {
+                                if (sortedRackOrder[i] > sortedRackOrder[j]) {
                                     temp1 = sortedRackOrder[i];
                                     sortedRackOrder[i] = sortedRackOrder[j];
                                     sortedRackOrder[j] = temp1;
@@ -322,8 +344,9 @@ public class MainActivity extends ListActivity{
                                 }
                             }
                         }
+                        //Obtaining the final order in required format and displaying it using customDialog
                         finalOutput += "The Shortest path is : \n" + var_rack_order + "\n----------------------------\n";
-                        for(i=0;i<sortedRackOrder.length;i++)
+                        for (i = 0; i < sortedRackOrder.length; i++)
                             output += "" + sortedRackOrder[i] + "->" + sortedListArray[i] + "\n" + "----------------------------" + "\n";
                         finalOutput += output;
                         showCustomDialog(finalOutput);
@@ -333,10 +356,8 @@ public class MainActivity extends ListActivity{
                     var_rack_order = "";
 
 
-                    //Log.d(MainActivity.TAG,""+lines_path[i]);
 
-
-                    for(i=0;i<rackList.length;i++)
+                    for (i = 0; i < rackList.length; i++)
                         rackList[i] = -1;
 
                 } catch (IOException e) {
@@ -345,7 +366,6 @@ public class MainActivity extends ListActivity{
                 }
             }
         };
-
 
 
         /** Setting the event listener for the add button */
@@ -360,12 +380,14 @@ public class MainActivity extends ListActivity{
         setListAdapter(adapter2);
     }
 
+    //Compares to arrays if they contain same elements in any order
     public static boolean compareArrays(Integer[] arr1, Integer[] arr2) {
         HashSet<Integer> set1 = new HashSet<Integer>(Arrays.asList(arr1));
         HashSet<Integer> set2 = new HashSet<Integer>(Arrays.asList(arr2));
         return set1.equals(set2);
     }
 
+    //To display custom dialog
     private void showCustomDialog(String var_rack_order) {
         //before inflating the custom alert dialog layout, we will get the current activity viewgroup
         ViewGroup viewGroup = findViewById(android.R.id.content);
@@ -374,9 +396,9 @@ public class MainActivity extends ListActivity{
         //then we will inflate the custom alert dialog xml that we created
         View dialogView = LayoutInflater.from(this).inflate(R.layout.my_dialog, viewGroup, false);
 
-        Button buttonOk = (Button)dialogView.findViewById(R.id.buttonOk);
+        Button buttonOk = (Button) dialogView.findViewById(R.id.buttonOk);
 
-        TextView txtPath = (TextView)dialogView.findViewById(R.id.txtPath);
+        TextView txtPath = (TextView) dialogView.findViewById(R.id.txtPath);
         txtPath.setText(var_rack_order);
 
         //Now we need an AlertDialog.Builder object
@@ -402,6 +424,9 @@ public class MainActivity extends ListActivity{
     }
 
 
+    /***
+     * Function to fill all the product names in autoCompleteTextView
+     */
     private void fillCountryList() {
         countryList = new ArrayList<>();
         try {
@@ -420,8 +445,10 @@ public class MainActivity extends ListActivity{
             // Convert the buffer into a string.
             String text = new String(buffer);
 
+            //Spliting each line by using new line regex expression
             String lines[] = text.split("\\r?\\n");
-            for(i=0;i<3620;i++)
+            //Adding each item to the list
+            for (i = 0; i < 3620; i++)
                 countryList.add(new CountryItem(lines[i]));
         } catch (IOException e) {
             // Should never happen!

@@ -1,5 +1,8 @@
 package com.example.loweproject;
 
+/***
+ * This is a model to set and get ItemName
+ */
 public class CountryItem {
     private String countryName;
 
