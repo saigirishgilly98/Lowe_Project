@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "861057183714",
+    "firebase_url": "https://lowes-project-f97a4.firebaseio.com",
+    "project_id": "lowes-project-f97a4",
+    "storage_bucket": "lowes-project-f97a4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:861057183714:android:ecd928469a7f742c8c13bb",
+        "android_client_info": {
+          "package_name": "com.example.loweproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "861057183714-v4cd1a8bnar3p127209525544b66oubj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.loweproject",
+            "certificate_hash": "44cd071ee45d1b648303b4a54d44ba391ba1ca6f"
+          }
+        },
+        {
+          "client_id": "861057183714-396vol6p03mhes75k2uo04aebh8et13r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCo8po2uwIvfOnIxK0HdU-_jcmTU3xU_oM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "861057183714-396vol6p03mhes75k2uo04aebh8et13r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
