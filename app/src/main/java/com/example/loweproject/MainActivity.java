@@ -7,6 +7,8 @@ import androidx.core.content.ContextCompat;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
@@ -24,6 +26,11 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -46,6 +53,10 @@ import java.util.stream.Stream;
  * This is the Main Activity of the program, where every functionality is implemented.
  */
 public class MainActivity extends ListActivity {
+
+    SharedPreferences sp;
+    FirebaseAuth mAuth = FirebaseAuth.getInstance();
+
     private List<CountryItem> countryList;
 
     /**
@@ -74,6 +85,10 @@ public class MainActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //SharedPreferences for Logout
+                sp = getSharedPreferences("login",
+                MODE_PRIVATE);
+
         /**
          * Function called to fill all the product names in autoCompleteTextView
          */
@@ -85,14 +100,17 @@ public class MainActivity extends ListActivity {
         AutoCompleteTextView editText = findViewById(R.id.actv);
         AutoCompleteCountryAdapter adapter = new AutoCompleteCountryAdapter(this, countryList);
         editText.setAdapter(adapter);
-        /** Reference to the button of the layout main.xml */
+        /** Reference to the button of the layout activity_main.xml */
         Button btn = (Button) findViewById(R.id.btnAdd);
 
-        /** Reference to the delete button of the layout main.xml */
+        /** Reference to the delete button of the layout activity_main.xml */
         Button btnDel = (Button) findViewById(R.id.btnDel);
 
-        /** Reference to the done button of the layout main.xml */
+        /** Reference to the done button of the layout activity_main.xml */
         final Button btnDone = (Button) findViewById(R.id.btnDone);
+
+        /** Reference to the LogOut button of the layout activity_main.xml */
+        Button btnLogOut = (Button) findViewById(R.id.btnLogOut);
 
         /** Defining the ArrayAdapter to set items to ListView */
         adapter2 = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_multiple_choice, listArray);
@@ -430,6 +448,27 @@ public class MainActivity extends ListActivity {
             }
         };
 
+        /** Defining a click event listener for the button "Log Out" */
+        View.OnClickListener listenerLogOut = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                mAuth.signOut();
+                AuthUI.getInstance()
+                        .signOut(MainActivity.this)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            public void onComplete(@NonNull Task<Void> task) {
+                                // ...
+                            }
+                        });
+
+                Intent intent8 = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent8);
+                sp.edit().putBoolean("logged", false).apply();
+
+            }
+        };
+
 
         /** Setting the event listener for the add button */
         btn.setOnClickListener(listener);
@@ -437,7 +476,11 @@ public class MainActivity extends ListActivity {
         /** Setting the event listener for the delete button */
         btnDel.setOnClickListener(listenerDel);
 
+        /** Setting the event listener for the done button */
         btnDone.setOnClickListener(listenerDone);
+
+        /** Setting the event listener for the log out button */
+        btnLogOut.setOnClickListener(listenerLogOut);
 
         /** Setting the adapter to the ListView */
         setListAdapter(adapter2);

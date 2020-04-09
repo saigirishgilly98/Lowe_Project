@@ -6,6 +6,7 @@
     <string name="hello_world">Hello World</string>
     <string name="lblBtnDel">Delete Selected Items</string>
     <string name="lblBtnDone">Done</string>
+    <string name="lblBtnLogOut">Log Out</string>
 
     <string name="bookpalace"><b>Book Palace</b></string>
     <string name="createaccount"><b>Create account.</b> New to Book Palace?</string>
@@ -21,7 +22,9 @@
     <string name="phone">Phone</string>
     <string name="confirm">Confirm Password</string>
 
-    <string name="default_web_client_id2">558672191416-vqqads54rst0gqjohoocisvmd1bqrhmt.apps.googleusercontent.com</string>
+    <string name="default_web_client_id2">861057183714-396vol6p03mhes75k2uo04aebh8et13r.apps.googleusercontent.com</string>
+    <string name="facebook_app_id">540335200217245</string>
+    <string name="fb_login_protocol_scheme">fb540335200217245</string>
 
 
 </resources>

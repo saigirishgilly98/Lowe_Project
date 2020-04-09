@@ -66,6 +66,7 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:3.0.0'
     implementation 'com.github.hotchemi:permissionsdispatcher:3.1.0'
     annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:3.1.0'
+    implementation 'com.google.android.material:material:1.0.0'
 
     implementation('net.named-data.jndn-extra:jndn-management:1.2.1') {
         exclude group: 'net.named-data', module: 'jndn'
