@@ -27,10 +27,6 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.firebase.ui.auth.AuthUI;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -54,8 +50,6 @@ import java.util.stream.Stream;
  */
 public class MainActivity extends ListActivity {
 
-    SharedPreferences sp;
-    FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     private List<CountryItem> countryList;
 
@@ -85,9 +79,6 @@ public class MainActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //SharedPreferences for Logout
-                sp = getSharedPreferences("login",
-                MODE_PRIVATE);
 
         /**
          * Function called to fill all the product names in autoCompleteTextView
@@ -109,8 +100,6 @@ public class MainActivity extends ListActivity {
         /** Reference to the done button of the layout activity_main.xml */
         final Button btnDone = (Button) findViewById(R.id.btnDone);
 
-        /** Reference to the LogOut button of the layout activity_main.xml */
-        Button btnLogOut = (Button) findViewById(R.id.btnLogOut);
 
         /** Defining the ArrayAdapter to set items to ListView */
         adapter2 = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_multiple_choice, listArray);
@@ -216,7 +205,6 @@ public class MainActivity extends ListActivity {
                     InputStream is = getAssets().open("array.txt");
                     InputStream is2 = getAssets().open("arrayrack.txt");
                     InputStream is3 = getAssets().open("path.txt");
-                    InputStream is4 = getAssets().open("recommendation.txt");
 
                     // We guarantee that the available method returns the total
                     // size of the asset...  of course, this does mean that a single
@@ -224,7 +212,6 @@ public class MainActivity extends ListActivity {
                     int size1 = is.available();
                     int size2 = is2.available();
                     int size3 = is3.available();
-                    int size4 = is4.available();
 
                     // Read the entire asset into a local byte buffer.
                     byte[] buffer_product = new byte[size1];
@@ -239,10 +226,6 @@ public class MainActivity extends ListActivity {
                     is3.read(buffer_path);
                     is3.close();
 
-                    byte[] buffer_recommendation = new byte[size4];
-                    is4.read(buffer_recommendation);
-                    is4.close();
-
                     // Convert the buffer into a string.
                     String text_product = new String(buffer_product);
 
@@ -256,18 +239,12 @@ public class MainActivity extends ListActivity {
 
                     String lines_path[] = text_path.split("\\r?\\n");
 
-                    String text_recommendation = new String(buffer_recommendation);
-
-                    String lines_recommendation[] = text_recommendation.split("\\r?\\n");
-
                     //Declaring rackList which is used to store the rack numbers of entered list items
                     int[] rackList = new int[listArray.size()];
-                    int[] recommendationIndex = new int[listArray.size()];
 
                     //Initializing to rackList array to -1
                     for (i = 0; i < rackList.length; i++) {
                         rackList[i] = -1;
-                        recommendationIndex[i] = -1;
                     }
 
 
@@ -281,7 +258,6 @@ public class MainActivity extends ListActivity {
                             if (product_name.equals(lines_product[j])) {
                                 Log.d(MainActivity.TAG, "Rack No: " + lines_rack[j]);
                                 rackList[k] = Integer.parseInt(lines_rack[j]);
-                                recommendationIndex[k] = Integer.parseInt(lines_recommendation[j]);
                                 k++;
                                 break;
                             }
@@ -289,17 +265,12 @@ public class MainActivity extends ListActivity {
                     }
                     //Declaring Rackorder to get definite number of rack numbers without impure(-1) values
                     Integer[] rackorder = new Integer[k];
-                    Integer[] recommendationIndexPure = new Integer[k];
                     int t = 0;
                     int z = 0;
                     for (i = 0; i < rackList.length; i++) {
                         if (rackList[i] != -1) {
                             rackorder[t] = rackList[i];
                             t++;
-                        }
-                        if (recommendationIndex[i] != -1) {
-                            recommendationIndexPure[z] = recommendationIndex[i];
-                            z++;
                         }
                         Log.d(MainActivity.TAG, "" + rackList[i]);
                     }
@@ -308,30 +279,11 @@ public class MainActivity extends ListActivity {
 
                     //Create set from array elements
                     LinkedHashSet<Integer> linkedHashSet = new LinkedHashSet<>(Arrays.asList(rackorder));
-                    LinkedHashSet<Integer> linkedHashSet1 = new LinkedHashSet<>(Arrays.asList(recommendationIndexPure));
 
                     //Get back the array without duplicates
                     Integer[] uniquerackorder = linkedHashSet.toArray(new Integer[]{});
-                    Integer[] uniquerecommendation = linkedHashSet1.toArray(new Integer[]{});
 
 
-                    int[] recommendorRackOrder = new int[uniquerecommendation.length];
-
-                    /**
-                     * Obtaining recommendation rack order for all the products entered in the list
-                     */
-                    k = 0;
-                    for (i = 0; i < uniquerecommendation.length; i++) {
-                        product_name = lines_product[uniquerecommendation[i]];
-                        for (j = 0; j < 3620; j++) {
-                            if (product_name.equals(lines_product[j])) {
-                                Log.d(MainActivity.TAG, "Rack No: " + lines_rack[j]);
-                                recommendorRackOrder[k] = Integer.parseInt(lines_rack[j]);
-                                k++;
-                                break;
-                            }
-                        }
-                    }
 
                     int temp;
                     //Sorting the unique rack order
@@ -405,30 +357,11 @@ public class MainActivity extends ListActivity {
                             }
                         }
 
-                        /**
-                         * Sorting recommendation order according to the corresponding rack orders
-                         */
-                        int temp3;
-                        for (i = 0; i < uniquerecommendation.length; i++) {
-                            for (j = i + 1; j < uniquerecommendation.length; j++) {
-                                if (recommendorRackOrder[i] > recommendorRackOrder[j]) {
-                                    temp1 = recommendorRackOrder[i];
-                                    recommendorRackOrder[i] = recommendorRackOrder[j];
-                                    recommendorRackOrder[j] = temp1;
-                                    temp3 = uniquerecommendation[i];
-                                    uniquerecommendation[i] = uniquerecommendation[j];
-                                    uniquerecommendation[j] = temp3;
-                                }
-                            }
-                        }
 
                         //Obtaining the final order in required format and displaying it using customDialog
                         finalOutput += "The Shortest path is : \n" + var_rack_order + "\n----------------------------\n";
                         for (i = 0; i < sortedRackOrder.length; i++)
                             output += "" + sortedRackOrder[i] + "->" + sortedListArray[i] + "\n" + "----------------------------" + "\n";
-                        output += "\n----Recommendation----" + "\n\n";
-                        for (i = 0; i < uniquerecommendation.length; i++)
-                            output += "" + recommendorRackOrder[i] + "->" + lines_product[uniquerecommendation[i]] + "\n" + "----------------------------" + "\n";
 
                         finalOutput += output;
                         showCustomDialog(finalOutput);
@@ -448,26 +381,6 @@ public class MainActivity extends ListActivity {
             }
         };
 
-        /** Defining a click event listener for the button "Log Out" */
-        View.OnClickListener listenerLogOut = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                mAuth.signOut();
-                AuthUI.getInstance()
-                        .signOut(MainActivity.this)
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            public void onComplete(@NonNull Task<Void> task) {
-                                // ...
-                            }
-                        });
-
-                Intent intent8 = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(intent8);
-                sp.edit().putBoolean("logged", false).apply();
-
-            }
-        };
 
 
         /** Setting the event listener for the add button */
@@ -478,9 +391,6 @@ public class MainActivity extends ListActivity {
 
         /** Setting the event listener for the done button */
         btnDone.setOnClickListener(listenerDone);
-
-        /** Setting the event listener for the log out button */
-        btnLogOut.setOnClickListener(listenerLogOut);
 
         /** Setting the adapter to the ListView */
         setListAdapter(adapter2);

@@ -27,7 +27,7 @@ public class SplashScreenActivity extends AppCompatActivity {
             public void run() {
                 //Intent is used to switch from one activity to another.
                 Intent i=new Intent(SplashScreenActivity.this,
-                        RegistrationActivity.class);
+                        MainActivity.class);
 
                 //invoke the SecondActivity.
                 startActivity(i);

@@ -8,23 +8,5 @@
     <string name="lblBtnDone">Done</string>
     <string name="lblBtnLogOut">Log Out</string>
 
-    <string name="bookpalace"><b>Book Palace</b></string>
-    <string name="createaccount"><b>Create account.</b> New to Book Palace?</string>
-    <string name="loginalreadymember"><b>Login.</b> Already a customer?</string>
-    <string name="signup"><b>Sign Up</b></string>
-    <string name="terms">By clicking register, I agree to your </string>
-    <string name="terms2"><u>Terms</u></string>
-    <string name="login">Login</string>
-    <string name="forgotpassword"><u>Forgot Password?</u></string>
-    <string name="email">Email Address</string>
-    <string name="password">Password</string>
-    <string name="name">Name</string>
-    <string name="phone">Phone</string>
-    <string name="confirm">Confirm Password</string>
-
-    <string name="default_web_client_id2">861057183714-396vol6p03mhes75k2uo04aebh8et13r.apps.googleusercontent.com</string>
-    <string name="facebook_app_id">540335200217245</string>
-    <string name="fb_login_protocol_scheme">fb540335200217245</string>
-
 
 </resources>
