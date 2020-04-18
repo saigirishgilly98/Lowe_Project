@@ -100,6 +100,7 @@ public class MainActivity extends ListActivity {
         /** Reference to the done button of the layout activity_main.xml */
         final Button btnDone = (Button) findViewById(R.id.btnDone);
 
+        Button btnNav = (Button) findViewById(R.id.btnNav);
 
         /** Defining the ArrayAdapter to set items to ListView */
         adapter2 = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_multiple_choice, listArray);
@@ -381,6 +382,14 @@ public class MainActivity extends ListActivity {
             }
         };
 
+        View.OnClickListener listenerNav = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, Location.class);
+                startActivity(i);
+            }
+        };
+
 
 
         /** Setting the event listener for the add button */
@@ -391,6 +400,8 @@ public class MainActivity extends ListActivity {
 
         /** Setting the event listener for the done button */
         btnDone.setOnClickListener(listenerDone);
+
+        btnNav.setOnClickListener(listenerNav);
 
         /** Setting the adapter to the ListView */
         setListAdapter(adapter2);
