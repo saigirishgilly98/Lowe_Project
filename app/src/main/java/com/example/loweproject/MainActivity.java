@@ -492,6 +492,11 @@ public class MainActivity extends ListActivity {
                     for (i = 0; i < rackorder.length; i++)
                         Log.d(MainActivity.TAG, "rackorder:" + rackorder[i]);
 
+                    int[] pass_rackorder = new int[rackorder.length];
+
+                    for(i = 0; i < pass_rackorder.length; i++)
+                        pass_rackorder[i] = rackorder[i];
+
                     //Create set from array elements
                     LinkedHashSet<Integer> linkedHashSet = new LinkedHashSet<>(Arrays.asList(rackorder));
 
@@ -600,6 +605,7 @@ public class MainActivity extends ListActivity {
                         Intent i = new Intent(MainActivity.this, Location.class);
                         i.putExtra("path", var_rack_order);
                         i.putExtra("product", product_pass);
+                        i.putExtra("rackorder", pass_rackorder);
                         startActivity(i);
                     }
 

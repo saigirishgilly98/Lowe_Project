@@ -53,7 +53,12 @@ public class Location extends AppCompatActivity {
         Intent intent = getIntent();
         String path = intent.getStringExtra("path");
         final ArrayList<String> product = intent.getStringArrayListExtra("product");
+        final int[] rackorder = intent.getIntArrayExtra("rackorder");
         int i, size = 0;
+        for(i=0; i < product.size(); i++)
+            Log.d(Location.TAG, "Product in Location : " + product.get(i));
+        for(i = 0; i < rackorder.length; i++)
+            Log.d(Location.TAG, "Rack Order in Location : " + rackorder[i]);
         final int[] array_product_rack = new int[product.size()];
         for(i = 0; i < path.length(); i++ ) {
             char c = path.charAt(i);
@@ -127,7 +132,14 @@ public class Location extends AppCompatActivity {
 
         int[][] product_display_rack = {{0}, {3, 4, 16}, {3, 4, 6}, {7, 8, 9, 18}, {7, 8, 9, 18}, {13, 14, 24}, {13, 14, 24}, {5, 2, 7}, {5, 2, 7}, {10, 11, 23}, {10, 11, 23}, {15, 35}, {15, 35}};
 
-        View.OnClickListener listenerNext = new View.OnClickListener() {
+            final int[] v_12 = {0};
+            final int[] v_34 = {0};
+            final int[] v_56 = {0};
+            final int[] v_78 = {0};
+            final int[] v_910 = {0};
+            final int[] v_1112 = {0};
+
+            View.OnClickListener listenerNext = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 rack.setImageResource(imagePath[listPath.get(count[0])]);
@@ -182,14 +194,115 @@ public class Location extends AppCompatActivity {
 
                 }
 
+                String output = "";
+
+                switch (listPath.get(count[0])) {
+                    case 3 :
+                    case 4 :
+                    case 16 :
+                        if(v_12[0] == 0) {
+                            for (int i = 0; i < rackorder.length; i++) {
+                                if (rackorder[i] == 1 || rackorder[i] == 2) {
+                                    output += rackorder[i] + " -> " + product.get(i) + "\n";
+                                }
+                            }
+                            if(output != "")
+                                showCustomDialog(output);
+                            output = "";
+                            v_12[0] = 1;
+                        }
+                            break;
+                    case 7 :
+                    case 8 :
+                    case 9 :
+                    case 18 :
+                        if(v_34[0] == 0) {
+                            for (int i = 0; i < rackorder.length; i++) {
+                                if (rackorder[i] == 3 || rackorder[i] == 4) {
+                                    output += rackorder[i] + " -> " + product.get(i) + "\n";
+                                }
+                            }
+                            if(output != "")
+                                showCustomDialog(output);
+                            output = "";
+                            v_34[0] = 1;
+                        }
+                        break;
+                    case 13 :
+                    case 14 :
+                    case 24 :
+                        if(v_56[0] == 0) {
+                            for (int i = 0; i < rackorder.length; i++) {
+                                if (rackorder[i] == 5 || rackorder[i] == 6) {
+                                    output += rackorder[i] + " -> " + product.get(i) + "\n";
+                                }
+                            }
+                            if(output != "")
+                                showCustomDialog(output);
+                            output = "";
+                            v_56[0] = 1;
+                        }
+                        break;
+                    case 5 :
+                    case 27 :
+                        if(v_78[0] == 0) {
+                            for (int i = 0; i < rackorder.length; i++) {
+                                if (rackorder[i] == 7 || rackorder[i] == 8) {
+                                    output += rackorder[i] + " -> " + product.get(i) + "\n";
+                                }
+                            }
+                            if(output != "")
+                                showCustomDialog(output);
+                            output = "";
+                            v_78[0] = 1;
+                        }
+                        break;
+                    case 10 :
+                    case 11 :
+                    case 23 :
+                        if(v_910[0] == 0) {
+                            for (int i = 0; i < rackorder.length; i++) {
+                                if (rackorder[i] == 9 || rackorder[i] == 10) {
+                                    output += rackorder[i] + " -> " + product.get(i) + "\n";
+                                }
+                            }
+                            if(output != "")
+                                showCustomDialog(output);
+                            output = "";
+                            v_910[0] = 1;
+                        }
+                        break;
+                    case 15 :
+                    case 35 :
+                        if(v_1112[0] == 0) {
+                            for (int i = 0; i < rackorder.length; i++) {
+                                if (rackorder[i] == 11 || rackorder[i] == 12) {
+                                    output += rackorder[i] + " -> " + product.get(i) + "\n";
+                                }
+                            }
+                            if(output != "")
+                                showCustomDialog(output);
+                            output = "";
+                            v_1112[0] = 1;
+                        }
+                        break;
+                }
+
 
                 if(count[0] < listPath.size() - 1) {
                     count[0]++;
                 } else {
-                    Toast.makeText(Location.this, "Journey Completed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Location.this, "Shopping Trip Completed", Toast.LENGTH_SHORT).show();
                 }
             }
         };
+
+            final int[] r_12 = {0};
+            final int[] r_34 = {0};
+            final int[] r_56 = {0};
+            final int[] r_78 = {0};
+            final int[] r_910 = {0};
+            final int[] r_1112 = {0};
 
         View.OnClickListener listenerPrev = new View.OnClickListener() {
             @Override
@@ -247,6 +360,101 @@ public class Location extends AppCompatActivity {
                         default: map.setImageResource(imageMap[0]);
 
                     }
+
+                    String output = "";
+
+                    switch (listPath.get(count[0])) {
+                        case 3 :
+                        case 4 :
+                        case 16 :
+                            if(r_12[0] == 0) {
+                                for (int i = 0; i < rackorder.length; i++) {
+                                    if (rackorder[i] == 1 || rackorder[i] == 2) {
+                                        output += rackorder[i] + " -> " + product.get(i) + "\n";
+                                    }
+                                }
+                                if (output != "")
+                                    showCustomDialog(output);
+                                output = "";
+                                r_12[0] = 1;
+                            }
+                            break;
+                        case 7 :
+                        case 8 :
+                        case 9 :
+                        case 18 :
+                            if(r_34[0] == 0) {
+                                for (int i = 0; i < rackorder.length; i++) {
+                                    if (rackorder[i] == 3 || rackorder[i] == 4) {
+                                        output += rackorder[i] + " -> " + product.get(i) + "\n";
+                                    }
+                                }
+                                if (output != "")
+                                    showCustomDialog(output);
+                                output = "";
+                                r_34[0] = 1;
+                            }
+                            break;
+                        case 13 :
+                        case 14 :
+                        case 24 :
+                            if(r_56[0] == 0) {
+                                for (int i = 0; i < rackorder.length; i++) {
+                                    if (rackorder[i] == 5 || rackorder[i] == 6) {
+                                        output += rackorder[i] + " -> " + product.get(i) + "\n";
+                                    }
+                                }
+                                if (output != "")
+                                    showCustomDialog(output);
+                                output = "";
+                                r_56[0] = 1;
+                            }
+                            break;
+                        case 5 :
+                        case 27 :
+                            if(r_78[0] == 0) {
+                                for (int i = 0; i < rackorder.length; i++) {
+                                    if (rackorder[i] == 7 || rackorder[i] == 8) {
+                                        output += rackorder[i] + " -> " + product.get(i) + "\n";
+                                    }
+                                }
+                                if (output != "")
+                                    showCustomDialog(output);
+                                output = "";
+                                r_78[0] = 1;
+                            }
+                            break;
+                        case 10 :
+                        case 11 :
+                        case 23 :
+                            if(r_910[0] == 0) {
+                                for (int i = 0; i < rackorder.length; i++) {
+                                    if (rackorder[i] == 9 || rackorder[i] == 10) {
+                                        output += rackorder[i] + " -> " + product.get(i) + "\n";
+                                    }
+                                }
+                                if (output != "")
+                                    showCustomDialog(output);
+                                output = "";
+                                r_910[0] = 1;
+                            }
+                            break;
+                        case 15 :
+                        case 35 :
+                            if(r_1112[0] == 0) {
+                                for (int i = 0; i < rackorder.length; i++) {
+                                    if (rackorder[i] == 11 || rackorder[i] == 12) {
+                                        output += rackorder[i] + " -> " + product.get(i) + "\n";
+                                    }
+                                }
+                                if (output != "")
+                                    showCustomDialog(output);
+                                output = "";
+                                r_1112[0] = 1;
+                            }
+                            break;
+                    }
+
                 } else {
                     Toast.makeText(Location.this, "Start Reached", Toast.LENGTH_SHORT).show();
                 }
