@@ -33,7 +33,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="Success"
+                android:text="Pick Up"
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
 
@@ -47,6 +47,7 @@
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
+
             <Button
                 android:id="@+id/buttonOk"
                 android:layout_width="200dp"
@@ -56,6 +57,29 @@
                 android:background="@drawable/roundedbutton"
                 android:text="Ok"
                 android:textColor="@color/colorPrimary" />
+
+
+            <TextView
+                android:id="@+id/txtTrolley"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:text="Items in Trolley"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+
+
+            <TextView
+                android:id="@+id/txtTrolleyItems"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:text="Trolley is Empty!!"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
 
         </LinearLayout>
 

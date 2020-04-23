@@ -54,7 +54,7 @@
     <ImageView
         android:id="@+id/map"
         android:layout_width="140dp"
-        android:layout_height="280dp"
+        android:layout_height="160dp"
         android:background="@drawable/map_0"
         android:alpha="0.7"
         android:layout_alignParentRight="true"
