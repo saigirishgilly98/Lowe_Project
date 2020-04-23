@@ -118,10 +118,25 @@ public class Location extends AppCompatActivity {
 
             int j;
             final ArrayList<Integer> listPath = new ArrayList<Integer>();
+            final ArrayList<Integer> listPathTemp = new ArrayList<Integer>();
             for (i = 1; i < arr_path.length; i++) {
                 int[] images = imageArray[arr_path[i - 1]][arr_path[i]];
-                for (j = 0; j < images.length; j++)
-                    listPath.add(images[j]);
+                for (j = 0; j < images.length; j++) {
+                    listPathTemp.add(images[j]);
+                }
+            }
+
+            for (j = 0; j < listPathTemp.size(); j++) {
+                Log.d(Location.TAG, "List Path Temp : " + listPathTemp.get(j) + "\n");
+            }
+
+            int temp = listPathTemp.get(0);
+            listPath.add(listPathTemp.get(0));
+            for(j=1; j < listPathTemp.size(); j++) {
+                if(temp != listPathTemp.get(j)) {
+                    listPath.add(listPathTemp.get(j));
+                }
+                temp = listPathTemp.get(j);
             }
 
             for (j = 0; j < listPath.size(); j++) {
