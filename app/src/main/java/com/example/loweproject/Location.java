@@ -230,7 +230,7 @@ public class Location extends AppCompatActivity {
                             if (v_12[0] == 0) {
                                 for (int i = 0; i < rackorder.length; i++) {
                                     if (rackorder[i] == 1 || rackorder[i] == 2) {
-                                        output += rackorder[i] + " -> " + product.get(i) + "\n";
+                                        output += rackorder[i] + " -> " + product.get(i) + "\n" + "----------------------------" + "\n";
                                     }
                                 }
                                 if (output != "")
@@ -246,7 +246,7 @@ public class Location extends AppCompatActivity {
                             if (v_34[0] == 0) {
                                 for (int i = 0; i < rackorder.length; i++) {
                                     if (rackorder[i] == 3 || rackorder[i] == 4) {
-                                        output += rackorder[i] + " -> " + product.get(i) + "\n";
+                                        output += rackorder[i] + " -> " + product.get(i) + "\n" + "----------------------------" + "\n";
                                     }
                                 }
                                 if (output != "")
@@ -261,7 +261,7 @@ public class Location extends AppCompatActivity {
                             if (v_56[0] == 0) {
                                 for (int i = 0; i < rackorder.length; i++) {
                                     if (rackorder[i] == 5 || rackorder[i] == 6) {
-                                        output += rackorder[i] + " -> " + product.get(i) + "\n";
+                                        output += rackorder[i] + " -> " + product.get(i) + "\n" + "----------------------------" + "\n";
                                     }
                                 }
                                 if (output != "")
@@ -275,7 +275,7 @@ public class Location extends AppCompatActivity {
                             if (v_78[0] == 0) {
                                 for (int i = 0; i < rackorder.length; i++) {
                                     if (rackorder[i] == 7 || rackorder[i] == 8) {
-                                        output += rackorder[i] + " -> " + product.get(i) + "\n";
+                                        output += rackorder[i] + " -> " + product.get(i) + "\n" + "----------------------------" + "\n";
                                     }
                                 }
                                 if (output != "")
@@ -290,7 +290,7 @@ public class Location extends AppCompatActivity {
                             if (v_910[0] == 0) {
                                 for (int i = 0; i < rackorder.length; i++) {
                                     if (rackorder[i] == 9 || rackorder[i] == 10) {
-                                        output += rackorder[i] + " -> " + product.get(i) + "\n";
+                                        output += rackorder[i] + " -> " + product.get(i) + "\n" + "----------------------------" + "\n";
                                     }
                                 }
                                 if (output != "")
@@ -304,7 +304,7 @@ public class Location extends AppCompatActivity {
                             if (v_1112[0] == 0) {
                                 for (int i = 0; i < rackorder.length; i++) {
                                     if (rackorder[i] == 11 || rackorder[i] == 12) {
-                                        output += rackorder[i] + " -> " + product.get(i) + "\n";
+                                        output += rackorder[i] + " -> " + product.get(i) + "\n" + "----------------------------" + "\n";
                                     }
                                 }
                                 if (output != "")
