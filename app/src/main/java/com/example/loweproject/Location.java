@@ -319,7 +319,9 @@ public class Location extends AppCompatActivity {
                     if (count[0] < listPath.size() - 1) {
                         count[0]++;
                     } else {
-                        Toast.makeText(Location.this, "Shopping Trip Completed", Toast.LENGTH_SHORT).show();
+                        String result = "";
+                        showCustomDialog(result);
+                        //Toast.makeText(Location.this, "Shopping Trip Completed", Toast.LENGTH_SHORT).show();
                     }
                 }
             };
@@ -425,7 +427,15 @@ public class Location extends AppCompatActivity {
         //then we will inflate the custom alert dialog xml that we created
         View dialogView = LayoutInflater.from(this).inflate(R.layout.my_dialog, viewGroup, false);
 
-        Button buttonOk = (Button) dialogView.findViewById(R.id.buttonOk);
+        if(var_rack_order == ""){
+            TextView txtShoppingTripCompleted = (TextView) dialogView.findViewById(R.id.txtShoppingTripCompleted);
+            txtShoppingTripCompleted.setText("Shopping Trip Completed");
+
+            Button buttonPickUp = (Button) dialogView.findViewById(R.id.buttonPickUp);
+            buttonPickUp.setText("Done");
+
+        }
+        Button buttonOk = (Button) dialogView.findViewById(R.id.buttonPickUp);
 
 
         TextView txtPath = (TextView) dialogView.findViewById(R.id.txtPath);

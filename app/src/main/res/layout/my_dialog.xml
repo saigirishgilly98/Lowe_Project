@@ -30,10 +30,11 @@
             android:padding="16dp">
 
             <TextView
+                android:id="@+id/txtShoppingTripCompleted"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="Pick Up"
+                android:text="Items to Pick"
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
 
@@ -49,13 +50,13 @@
 
 
             <Button
-                android:id="@+id/buttonOk"
+                android:id="@+id/buttonPickUp"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="15dp"
                 android:background="@drawable/roundedbutton"
-                android:text="Ok"
+                android:text="Pick Up"
                 android:textColor="@color/colorPrimary" />
 
 

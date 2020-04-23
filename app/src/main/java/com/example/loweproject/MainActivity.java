@@ -442,7 +442,7 @@ public class MainActivity extends ListActivity {
         //then we will inflate the custom alert dialog xml that we created
         View dialogView = LayoutInflater.from(this).inflate(R.layout.my_dialog, viewGroup, false);
 
-        Button buttonOk = (Button) dialogView.findViewById(R.id.buttonOk);
+        Button buttonOk = (Button) dialogView.findViewById(R.id.buttonPickUp);
 
         TextView txtPath = (TextView) dialogView.findViewById(R.id.txtPath);
         txtPath.setText(var_rack_order);
