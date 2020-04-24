@@ -1,24 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginLeft="8dp"
-    android:layout_marginTop="8dp"
-    android:layout_marginRight="8dp"
-    android:layout_marginBottom="8dp"
-    android:background="@drawable/back"
+    android:layout_height="match_parent"
+    android:adjustViewBounds="true"
+    android:background="@drawable/background"
     android:orientation="vertical"
     android:padding="16dp"
+    android:theme="@style/AppTheme"
     tools:context="com.example.loweproject.MainActivity">
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="10dp"
+        android:src="@drawable/assistant" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/logo"
+        android:paddingTop="15dp"
+
+        android:text="Welcome. Please Add Items to begin."
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="20sp" />
+
 
     <AutoCompleteTextView
         android:id="@+id/actv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_below="@+id/logo"
+        android:layout_marginTop="38dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/back"
         android:completionThreshold="1"
@@ -28,37 +46,51 @@
         android:id="@+id/btnAdd"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/actv"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        android:layout_toRightOf="@id/actv"
-        android:background="@drawable/roundedbutton"
+        android:background="@drawable/custom_button"
+        android:drawableEnd="@drawable/ic_add_black_24dp"
+        android:drawableRight="@drawable/ic_add_black_24dp"
+        android:paddingEnd="10dp"
+        android:paddingRight="10dp"
         android:text="@string/lblBtnAdd" />
 
     <Button
         android:id="@+id/btnDel"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/btnAdd"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        android:background="@drawable/roundedbutton"
+        android:background="@drawable/custom_button"
+        android:drawableEnd="@drawable/ic_delete_black_24dp"
+        android:drawableRight="@drawable/ic_delete_black_24dp"
+        android:paddingEnd="10dp"
+        android:paddingRight="10dp"
         android:text="@string/lblBtnDel" />
+
 
     <Button
         android:id="@+id/btnNav"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/btnDel"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        android:background="@drawable/roundedbutton"
-        android:text="Navigate-->" />
+        android:background="@drawable/custom_button"
+        android:drawableEnd="@drawable/ic_navigation_black_24dp"
+        android:drawableRight="@drawable/ic_navigation_black_24dp"
+        android:paddingEnd="10dp"
+        android:paddingRight="10dp"
+        android:text="Navigate" />
 
     <TextView
         android:id="@android:id/empty"
         android:layout_width="fill_parent"
+
         android:layout_height="wrap_content"
-        android:layout_below="@id/actv"
+        android:layout_below="@id/btnNav"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:gravity="center_horizontal"
@@ -68,11 +100,11 @@
         android:id="@android:id/list"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/actv"
+        android:layout_below="@android:id/empty"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        android:background="@drawable/back"
-        android:choiceMode="multipleChoice"></ListView>
+        android:background="@drawable/listback"
+        android:choiceMode="multipleChoice" />
 
 
-</LinearLayout>
+</RelativeLayout>
