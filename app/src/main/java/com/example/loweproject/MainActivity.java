@@ -1,17 +1,8 @@
 package com.example.loweproject;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.Typeface;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseBooleanArray;
@@ -21,28 +12,17 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.ListView;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Stream;
 
 
 /**
@@ -70,6 +50,7 @@ public class MainActivity extends ListActivity {
      */
     String item, product_name;
     String var_rack_order = "";
+    int[] sizeList = new int[13];
     private static final String TAG = MainActivity.class.getName();
 
     int i, j;
@@ -204,6 +185,7 @@ public class MainActivity extends ListActivity {
                         InputStream is = getAssets().open("optimaluniqueproduct.txt");
                         InputStream is2 = getAssets().open("optimalrack.txt");
                         InputStream is3 = getAssets().open("optimalpath.txt");
+                        InputStream is4= getAssets().open("size.txt");
 
                         // We guarantee that the available method returns the total
                         // size of the asset...  of course, this does mean that a single
@@ -211,6 +193,7 @@ public class MainActivity extends ListActivity {
                         int size1 = is.available();
                         int size2 = is2.available();
                         int size3 = is3.available();
+                        int size4 = is4.available();
 
                         // Read the entire asset into a local byte buffer.
                         byte[] buffer_product = new byte[size1];
@@ -225,6 +208,10 @@ public class MainActivity extends ListActivity {
                         is3.read(buffer_path);
                         is3.close();
 
+                        byte[] buffer_size = new byte[size4];
+                        is4.read(buffer_size);
+                        is4.close();
+
                         // Convert the buffer into a string.
                         String text_product = new String(buffer_product);
 
@@ -238,9 +225,15 @@ public class MainActivity extends ListActivity {
 
                         String lines_path[] = text_path.split("\\r?\\n");
 
+                        String text_size = new String(buffer_size);
+
+                        String lines_size[] = text_size.split("\\r?\\n");
+
 
                         //Declaring rackList which is used to store the rack numbers of entered list items
                         int[] rackList = new int[listArray.size()];
+                        int[] corresponding_size = new int[12];
+
 
                         //Initializing to rackList array to -1
                         for (i = 0; i < rackList.length; i++) {
@@ -260,12 +253,21 @@ public class MainActivity extends ListActivity {
                                 if (product_name.equals(lines_product[j])) {
                                     Log.d(MainActivity.TAG, "Rack No: " + lines_rack[j]);
                                     product_pass.add(product_name);
+                                    int racknum = Integer.parseInt(lines_rack[j]);
+                                    int sizenum = Integer.parseInt(lines_size[j]);
+
+                                    if(sizeList[racknum]<sizenum && sizeList[racknum]<=3)
+                                        sizeList[racknum]=Integer.parseInt(lines_size[j]);
+
+                                    Log.d(MainActivity.TAG, "Size numbers : "+sizeList[racknum]);
                                     rackList[k] = Integer.parseInt(lines_rack[j]);
+
                                     k++;
                                     break;
                                 }
                             }
                         }
+
                         //Declaring Rackorder to get definite number of rack numbers without impure(-1) values
                         Integer[] rackorder = new Integer[k];
                         int t = 0;
@@ -296,7 +298,7 @@ public class MainActivity extends ListActivity {
                         //Sorting the unique rack order
                         for (i = 0; i < uniquerackorder.length; i++) {
                             for (j = i + 1; j < uniquerackorder.length; j++) {
-                                if (uniquerackorder[i] > uniquerackorder[j]) {
+                                if (uniquerackorder[i] > uniquerackorder[j] ) {
                                     temp = uniquerackorder[i];
                                     uniquerackorder[i] = uniquerackorder[j];
                                     uniquerackorder[j] = temp;
@@ -390,9 +392,10 @@ public class MainActivity extends ListActivity {
                             Log.d(MainActivity.TAG, "finalOutput: " + finalOutput);
                             //showCustomDialog(finalOutput);
                             Intent i = new Intent(MainActivity.this, Location.class);
-                            i.putExtra("path", var_rack_order);
-                            i.putExtra("product", product_pass);
-                            i.putExtra("rackorder", pass_rackorder);
+                            i.putExtra("path", var_rack_order); //For final output
+                            i.putExtra("product", product_pass);//Product Names
+                            i.putExtra("rackorder", pass_rackorder); //Rack order
+                            i.putExtra("size array", sizeList);
                             startActivity(i);
                         }
 

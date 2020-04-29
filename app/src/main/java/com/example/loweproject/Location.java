@@ -55,6 +55,7 @@ public class Location extends AppCompatActivity {
 
         Intent intent = getIntent();
         String path = intent.getStringExtra("path");
+        final int[] sizeList = intent.getIntArrayExtra("size array");
         final ArrayList<String> product = intent.getStringArrayListExtra("product");
         final int[] rackorder = intent.getIntArrayExtra("rackorder");
         int i, size = 0;
@@ -66,19 +67,41 @@ public class Location extends AppCompatActivity {
         for (i = 0; i < path.length(); i++) {
             char c = path.charAt(i);
             if (Character.isDigit(c)) {
-                size++;
+                if ((i + 1) != path.length()
+                        && Character.isDigit(path.charAt(i + 1))) {
+                    size++;
+
+                    Log.d(Location.TAG, "Digits " + path.charAt(i) + path.charAt(i + 1));
+                    i++;
+                } else {
+                    size++;
+                    Log.d(Location.TAG, "Digits " + c);
+                }
             }
         }
+        Log.d(Location.TAG, "Path variable " + path);
 
 
+        final int[] arr_path_new = new int[size];
         final int[] arr_path = new int[size];
         final ArrayList<Integer> arr_product = new ArrayList<Integer>();
         int k = 0;
+        int cnt = 0, z = 0;
         Pattern p = Pattern.compile("\\d+");
         Matcher m = p.matcher(path);
         while (m.find()) {
-            arr_path[k++] = Integer.parseInt(m.group());
+            arr_path_new[k++] = Integer.parseInt(m.group());
+            if (arr_path_new[k - 1] == 0)
+                cnt++;
+            if (cnt == 2)
+                break;
         }
+
+        for (i = 0; i < arr_path_new.length; i++) {
+            Log.d(Location.TAG, "Arr_path_new has " + arr_path_new[i] + "\n");
+
+        }
+
 
         try {
             InputStream is = getAssets().open("optimalrack.txt");
@@ -94,10 +117,39 @@ public class Location extends AppCompatActivity {
             String text_rack = new String(buffer_rack);
 
             String lines_rack[] = text_rack.split("\\r?\\n");
+            int c = 0, p1 = 1, p2 = arr_path_new.length - 2;
+            arr_path[0] = 0;
+            arr_path[arr_path_new.length - 1] = 0;
+            for (i = 0; i < arr_path_new.length - 1; i++) {
+                if (arr_path_new[i] == 0) {
+                    c++;
+                    if (c == 2)
+                        break;
+                    continue;
+                }
+                if (sizeList[arr_path_new[i]] == 1) {
+                    int x = arr_path_new[i];
+                    arr_path[p1++] = arr_path_new[i];
+                }
+                if (sizeList[arr_path_new[i]] == 3) {
+                    Log.d(Location.TAG, "Altered " + i);
+                    int x = arr_path_new[i];
+                    arr_path[p2--] = arr_path_new[i];
+                }
+
+            }
+
+            for (i = 0; i < arr_path_new.length; i++) {
+                if (sizeList[arr_path_new[i]] == 2) {
+                    arr_path[p1++] = arr_path_new[i];
+                }
 
 
-            for (i = 0; i < arr_path.length; i++)
-                Log.d(Location.TAG, "Array Path: " + arr_path[i]);
+            }
+            for (i = 0; i < arr_path_new.length; i++) {
+                Log.d(Location.TAG, "Final ARR_PATH " + arr_path[i]);
+            }
+
 
             View.OnClickListener listenerClose = new View.OnClickListener() {
                 @Override
@@ -132,8 +184,8 @@ public class Location extends AppCompatActivity {
 
             int temp = listPathTemp.get(0);
             listPath.add(listPathTemp.get(0));
-            for(j=1; j < listPathTemp.size(); j++) {
-                if(temp != listPathTemp.get(j)) {
+            for (j = 1; j < listPathTemp.size(); j++) {
+                if (temp != listPathTemp.get(j)) {
                     listPath.add(listPathTemp.get(j));
                 }
                 temp = listPathTemp.get(j);
@@ -413,7 +465,7 @@ public class Location extends AppCompatActivity {
             /** Setting the event listener for the Close button */
             btnClose.setOnClickListener(listenerClose);
 
-        } catch (IOException e) {
+        } catch (ArrayIndexOutOfBoundsException | IOException e) {
             e.printStackTrace();
         }
 
@@ -427,7 +479,7 @@ public class Location extends AppCompatActivity {
         //then we will inflate the custom alert dialog xml that we created
         View dialogView = LayoutInflater.from(this).inflate(R.layout.my_dialog, viewGroup, false);
 
-        if(var_rack_order == ""){
+        if (var_rack_order == "") {
             TextView txtShoppingTripCompleted = (TextView) dialogView.findViewById(R.id.txtShoppingTripCompleted);
             txtShoppingTripCompleted.setText("Shopping Trip Completed");
 
